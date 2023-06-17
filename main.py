@@ -40,14 +40,31 @@ def main():
     x_train = scaler.fit_transform(x_train)
     x_test = scaler.fit_transform(x_test)
 
-    rand_forest = RandomForestClassifier(random_state=42, max_features='auto', n_estimators=200, max_depth=4,
-                                         criterion='gini')
-    rand_forest.fit(x_train, y_train)
-    y_pred = rand_forest.predict(x_test)
-    print("Accuracy for Random Forest on CV data: ", accuracy_score(y_test, y_pred))
-    print(precision_score(y_test, y_pred) * 100)
-    print(recall_score(y_test, y_pred) * 100)
-    print(f1_score(y_test, y_pred) * 100)
+    # rand_forest = RandomForestClassifier(random_state=42, max_features='auto', n_estimators=200, max_depth=4,
+    #                                      criterion='gini')
+    # rand_forest.fit(x_train, y_train)
+    # y_pred = rand_forest.predict(x_test)
+    # print("Accuracy for Random Forest on CV data: ", accuracy_score(y_test, y_pred))
+    # print(precision_score(y_test, y_pred) * 100)
+    # print(recall_score(y_test, y_pred) * 100)
+    # print(f1_score(y_test, y_pred) * 100)
+
+    from sklearn.svm import SVC
+
+    # defining parameter range
+    param_grid = {'C': [0.1, 1, 10, 100, 1000],
+                  'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+                  'kernel': ['rbf']}
+
+    grid = GridSearchCV(SVC(), param_grid, refit=True, verbose=1, cv=5)
+
+    # fitting the model for grid search
+    grid.fit(x_train, y_train)
+
+    print("tuned hyperparameters :(best parameters) ", grid.best_params_)
+
+    print("accuracy :", grid.best_score_ * 100)
+
 
     # pipe = Pipeline([('classifier', RandomForestClassifier())])
     #
