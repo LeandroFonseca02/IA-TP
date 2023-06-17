@@ -40,14 +40,30 @@ def main():
     x_train = scaler.fit_transform(x_train)
     x_test = scaler.fit_transform(x_test)
 
+    rand_forest = RandomForestClassifier(random_state=42, max_features='auto', n_estimators=200, max_depth=4,
+                                         criterion='gini')
+    rand_forest.fit(x_train, y_train)
+    y_pred = rand_forest.predict(x_test)
+    print("Accuracy for Random Forest on CV data: ", accuracy_score(y_test, y_pred))
+    print(precision_score(y_test, y_pred) * 100)
+    print(recall_score(y_test, y_pred) * 100)
+    print(f1_score(y_test, y_pred) * 100)
+
     # pipe = Pipeline([('classifier', RandomForestClassifier())])
-
-    # Create param grid.
-
-    # param_grid = [
+    #
+    # #Create param grid.
+    #
+    # param_grid_logistic_regression = [
+    #     {'classifier': [LogisticRegression()],
+    #      'classifier__penalty': ['l1', 'l2'],
+    #      'classifier__C': np.logspace(-4, 4, 20),
+    #      'classifier__solver': ['liblinear']},
+    # ]
+    #
+    # param_grid_random_forest = [
     #     {'classifier': [RandomForestClassifier()],
     #      'classifier__n_estimators': list(range(10, 101, 10)),
-    #      'classifier__max_features': list(range(6, 32, 5))}
+    #      'classifier__max_features': list(range(4, 16, 2))}
     # ]
     #
     # # Create grid search object
@@ -58,29 +74,29 @@ def main():
     #
     # best_clf = clf.fit(x_train, y_train)
     # print(best_clf)
-
-    rand_forest = RandomForestClassifier(max_features=16, max_depth=16, random_state=86)
-    rand_forest.fit(x_train, y_train)
-    rand_forest.score(x_train, y_train)
-    y_pred = rand_forest.predict(x_test)
-    print("\nRandom Forest:")
-    print("Accuracy: " + str(accuracy_score(y_test, y_pred) * 100))
-    print("Precision: " + str(precision_score(y_test, y_pred) * 100))
-    print("Recall: " + str(recall_score(y_test, y_pred) * 100))
-    print("F1-Score: " + str(f1_score(y_test, y_pred) * 100))
-    print("AUC: " + str(roc_auc_score(y_test, y_pred) * 100))
-
-    log_reg = LogisticRegression(random_state=86, C=0.0018329807108324356, penalty='l1', solver='liblinear')
-    log_reg.fit(x_train, y_train)
-
-    log_reg.score(x_train, y_train)
-    y_pred = log_reg.predict(x_test)
-    print("\nRegressão Logística:")
-    print("Accuracy: " + str(accuracy_score(y_test, y_pred) * 100))
-    print("Precision: " + str(precision_score(y_test, y_pred) * 100))
-    print("Recall: " + str(recall_score(y_test, y_pred) * 100))
-    print("F1-Score: " + str(f1_score(y_test, y_pred) * 100))
-    print("AUC: " + str(roc_auc_score(y_test, y_pred) * 100))
+    #
+    # rand_forest = RandomForestClassifier(max_features=16, max_depth=16, random_state=86)
+    # rand_forest.fit(x_train, y_train)
+    # rand_forest.score(x_train, y_train)
+    # y_pred = rand_forest.predict(x_test)
+    # print("\nRandom Forest:")
+    # print("Accuracy: " + str(accuracy_score(y_test, y_pred) * 100))
+    # print("Precision: " + str(precision_score(y_test, y_pred) * 100))
+    # print("Recall: " + str(recall_score(y_test, y_pred) * 100))
+    # print("F1-Score: " + str(f1_score(y_test, y_pred) * 100))
+    # print("AUC: " + str(roc_auc_score(y_test, y_pred) * 100))
+    #
+    # log_reg = LogisticRegression(random_state=86, C=0.0018329807108324356, penalty='l1', solver='liblinear')
+    # log_reg.fit(x_train, y_train)
+    #
+    # log_reg.score(x_train, y_train)
+    # y_pred = log_reg.predict(x_test)
+    # print("\nRegressão Logística:")
+    # print("Accuracy: " + str(accuracy_score(y_test, y_pred) * 100))
+    # print("Precision: " + str(precision_score(y_test, y_pred) * 100))
+    # print("Recall: " + str(recall_score(y_test, y_pred) * 100))
+    # print("F1-Score: " + str(f1_score(y_test, y_pred) * 100))
+    # print("AUC: " + str(roc_auc_score(y_test, y_pred) * 100))
 
 
 
