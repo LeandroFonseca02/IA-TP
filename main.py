@@ -36,7 +36,7 @@ def main():
 
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=86)
 
-    scaler = MinMaxScaler()
+    scaler = StandardScaler()
     x_train = scaler.fit_transform(x_train)
     x_test = scaler.fit_transform(x_test)
 
@@ -49,21 +49,21 @@ def main():
     # print(recall_score(y_test, y_pred) * 100)
     # print(f1_score(y_test, y_pred) * 100)
 
-    from sklearn.svm import SVC
-
+    # from sklearn.svm import SVC
+    #
     # defining parameter range
-    param_grid = {'C': [0.1, 1, 10, 100, 1000],
-                  'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
-                  'kernel': ['rbf']}
-
-    grid = GridSearchCV(SVC(), param_grid, refit=True, verbose=1, cv=5)
-
-    # fitting the model for grid search
-    grid.fit(x_train, y_train)
-
-    print("tuned hyperparameters :(best parameters) ", grid.best_params_)
-
-    print("accuracy :", grid.best_score_ * 100)
+    # param_grid = {'C': [0.1, 1, 10],
+    #               'gamma': [1, 0.1],
+    #               'kernel': ['rbf']}
+    #
+    # grid = GridSearchCV(SVC(), param_grid, refit=True, verbose=1, cv=2)
+    #
+    # # fitting the model for grid search
+    # grid.fit(x_train, y_train)
+    #
+    # print("tuned hyperparameters :(best parameters) ", grid.best_params_)
+    #
+    # print("accuracy :", grid.best_score_ * 100)
 
 
     # pipe = Pipeline([('classifier', RandomForestClassifier())])
@@ -156,6 +156,29 @@ def main():
     # print("Precision: " + str(precision_score(y_test, y_pred) * 100))
     # print("Recall: " + str(recall_score(y_test, y_pred) * 100))
     # print("F1-Score: " + str(f1_score(y_test, y_pred) * 100))
+
+
+    param_grid_decision_tree = [
+        {'criterion': ['gini', 'entropy'],
+         'max_depth': range(1, 15),
+         'max_features': ['sqrt', 'log2']
+        }
+    ]
+
+    # Create grid search object
+
+    grid_decision_tree = GridSearchCV(DecisionTreeClassifier(random_state=86), param_grid=param_grid_decision_tree, cv=5, verbose=True, n_jobs=-1)
+    print(grid_decision_tree.best_params_)
+
+    # Fit on data
+
+    grid_decision_tree.fit(x_train, y_train)
+    y_pred = grid_decision_tree.predict(x_test)
+    test_accuracy = accuracy_score(y_test, y_pred) * 100
+    print("Accuracy for our testing dataset with tuning is : {:f}%".format(test_accuracy))
+    print(precision_score(y_test, y_pred) * 100)
+    print(recall_score(y_test, y_pred) * 100)
+    print(f1_score(y_test, y_pred) * 100)
 
 
 if __name__ == "__main__":
